@@ -1,4 +1,4 @@
-const baseUrl = 'http://127.0.0.1:3000';
+const baseUrl = 'http://127.0.0.1:3000/api';
 
 const httpGet = async (url, token) => {
   return await fetch(url, {
@@ -38,12 +38,12 @@ const httpPost = async (url, token, data) => {
     });
 };
 
-export const getUserData = async () => {
-  const url = `${baseUrl}/user`;
+export const getUsersDataApi = async () => {
+  const url = `${baseUrl}/users`;
   return httpGet(url, '123');
 };
 
-export const postUserLogin = (data) => {
+export const postUserLoginApi = (data) => {
   const url = `${baseUrl}/user/login`;
   return httpPost(url, '123', data);
 };

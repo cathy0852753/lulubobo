@@ -2,10 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Table, Button, Input, Space, Layout } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
-import { getUserData } from '../common/resource';
-import './baseTable.css';
-
-const { } = Layout;
+import { getUsersDataApi } from '../common/resource';
+import { getUsersData } from '../common/fakeData';
 
 const UserPage = () => {
 
@@ -19,16 +17,25 @@ const UserPage = () => {
     fetchUserData();
   }, []);
 
+  const col = [
+    { key: 'userId', fieldName: '使用者編號', width: 100, },
+    { key: 'userName', fieldName: '使用者', width: 100, },
+    { key: 'email', fieldName: '信箱', width: 100, },
+    { key: 'password', fieldName: '密碼', width: 100, },
+    { key: 'permissions', fieldName: '權限', width: 100, },
+  ];
+
   const fetchUserData = async () => {
-    const data = await getUserData();
-    const fieldName = data.fieldName.slice(1);
-    const columns = fieldName.map(col => ({
-      key: col,
-      title: col,
-      dataIndex: col,
-      ...getColumnSearchProps(col),
+    const data = await getUsersDataApi() || getUsersData;
+    console.log(data);
+    const columns = col.map(col => ({
+      key: col.key,
+      title: col.fieldName,
+      dataIndex: col.key,
+      width: col.width,
+      ...getColumnSearchProps(col.key),
     }));
-    const users = data.users.map((user, index) => ({
+    const users = data.users.map((user) => ({
       key: `${user._id}`,
       ...user
     }));
@@ -114,6 +121,8 @@ const UserPage = () => {
       rowKey={(record) => record._id}
       columns={columns}
       dataSource={dataSource}
+      pagination={false}
+      scroll={{ x: 'calc(100vw - 300px)', }}
     />
 
   );

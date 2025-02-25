@@ -1,13 +1,16 @@
+require('dotenv').config();
 const { MongoClient } = require('mongodb');
 
 let dbConnection;
-const uri = "mongodb+srv://cathy0852753:7JAXNUApLhAviMTt@cathy.sdbfb.mongodb.net/?retryWrites=true&w=majority&appName=cathy";
+//process.env.DB_URI || 
+const uri = 'mongodb://localhost:27017/lulubobo';
 
 const connectToDb = async () => {
   try {
-    const dbUri = 'mongodb://localhost:27017/';
+    console.log(uri);
     const collectionName = 'lulubobo';
     const client = await MongoClient.connect(uri);
+    console.log(client);
     dbConnection = client.db(collectionName);
     console.log('Successfully connected to MongoDB.');
   } catch (err) {

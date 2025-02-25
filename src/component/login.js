@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './provider';
-import { postUserLogin, postAddUser } from '../common/resource';
+import { postUserLoginApi, postAddUser } from '../common/resource';
 import { message, Button, Form, Input, Space } from 'antd';
+import { postUserLogin } from '../common/fakeData';
 
 const LoginPage = ({ type }) => {
   const [formInput, setFormInput] = useState([]);
@@ -21,9 +22,10 @@ const LoginPage = ({ type }) => {
   const handleLogin = async (values) => {
     const { email, password } = values;
     try {
-      const result = await postUserLogin({ email, password });
+      const result = await postUserLoginApi({ email, password }) || postUserLogin;
+      console.log(result);
       if (result.isOk === 'Y') {
-        login(result.user_name);
+        login(result.user);
         navigate('/');
         form.resetFields();
       } else {
@@ -166,7 +168,7 @@ const LoginPage = ({ type }) => {
     <div style={styles.container}>
       <div style={styles.formWrapper}>
         <h2>{type === 'register' ? '註冊' : '登入'}</h2>
-        <Form {...formLayout}>
+        <Form form={form} {...formLayout}>
           {formInput.map((input) => getFormItem(input))}
           <div style={styles.buttonGroup}>
             <Space>
